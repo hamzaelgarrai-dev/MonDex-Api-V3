@@ -37,11 +37,10 @@ export const getData = async () => {
         throw new Error("Failed to fetch cards");
     }
 
-    const data = await response.json();
 
     // sessionStorage.setItem(cacheKey, JSON.stringify(data.data));
 
-    return data;
+    return await response.json();
 };
 
 // filtre from api
@@ -56,15 +55,15 @@ export const getFilterData = async (type) => {
         throw new Error("Failed to fetch the selected type");
     }
 
-    const data = await response.json();
+    
 
-    return data;
+    return await response.json();
 };
 
 
 // search in the api function
 
-export const searchCardsWithFilter = async (type , search) =>{
+export const searchCardsWithFilter = async (type , search, sort, order) =>{
 
     const params = new URLSearchParams();
 
@@ -73,10 +72,15 @@ export const searchCardsWithFilter = async (type , search) =>{
     }
     
     if(search.trim()){
-        params.append("q" , search.trim())
+        params.append("name_like" , search.trim())
     }
 
-  const res = await fetch(`http://localhost:3000/cards?${params}`)
+    if(sort){
+        params.append("_sort" , sort);
+        params.append("_order" , order);
+    }
+
+  const res = await fetch(`http://localhost:3000/cards?${params.toString()}`)
 
   
   if (!res.ok) {
@@ -87,4 +91,19 @@ export const searchCardsWithFilter = async (type , search) =>{
 
 }
 
-// 
+// get cards details 
+
+export const getCardsDetails = async (id) =>{
+
+    const response = await fetch(
+        `http://localhost:3000/cards/${id}`
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch the cards details");
+    }
+
+    return await response.json();
+
+
+}

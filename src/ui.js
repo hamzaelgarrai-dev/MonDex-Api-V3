@@ -249,7 +249,7 @@ export const loadCardDetails = () => {
                 </span>
             </div>
 
-            <p class="text-[#9CA9BC]">${card.desc}</p>
+            <p class="text-[#9CA9BC]">${card.description}</p>
 
             <div class="flex flex-col gap-2 text-sm">
 
@@ -257,11 +257,11 @@ export const loadCardDetails = () => {
                     <span class="font-bold text-[#9CA9BC]">Level</span>
                     <span class="h-3 rounded-full bg-ground">
                         <span class="block h-3 rounded-full bg-brand"
-                            style="width: ${Math.min(((card.level ?? 0) / 12) * 100, 100)}%">
+                            style="width: ${Math.min(((card.stats.level ?? 0) / 12) * 100, 100)}%">
                         </span>
                     </span>
                     <span class="text-right text-[#9CA9BC] font-mono">
-                        ${card.level ?? "-"}
+                        ${card.stats.level ?? "-"}
                     </span>
                 </div>
 
@@ -269,11 +269,11 @@ export const loadCardDetails = () => {
                     <span class="font-bold text-[#9CA9BC]">Attaque</span>
                     <span class="h-3 rounded-full bg-ground">
                         <span class="block h-3 rounded-full bg-brand"
-                            style="width: ${Math.min(((card.atk ?? 0) / 5000) * 100, 100)}%">
+                            style="width: ${Math.min(((card.stats.attack ?? 0) / 5000) * 100, 100)}%">
                         </span>
                     </span>
                     <span class="text-right font-mono text-[#9CA9BC]">
-                        ${card.atk ?? "-"}
+                        ${card.stats.defense ?? "-"}
                     </span>
                 </div>
 
@@ -281,11 +281,11 @@ export const loadCardDetails = () => {
                     <span class="font-bold text-[#9CA9BC]">Défense</span>
                     <span class="h-3 rounded-full bg-ground">
                         <span class="block h-3 rounded-full bg-brand"
-                            style="width: ${Math.min(((card.def ?? 0) / 5000) * 100, 100)}%">
+                            style="width: ${Math.min(((card.stats.defense ?? 0) / 5000) * 100, 100)}%">
                         </span>
                     </span>
                     <span class="text-right font-mono text-[#9CA9BC]">
-                        ${card.def ?? "-"}
+                        ${card.stats.defense ?? "-"}
                     </span>
                 </div>
 

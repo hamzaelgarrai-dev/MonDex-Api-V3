@@ -203,6 +203,48 @@ GlobalEventListner("click", ".favorite-btn", (e) => {
 });
 
 
+// handle sorting
+
+document.querySelectorAll("[data-sort]").forEach(btn =>{
+  btn.addEventListener("click", async ()=>{
+    const sort = btn.dataset.sort;
+    const order = btn.dataset.order;
+
+const selectedType = localStorage.getItem("selectedType") || "All";
+  const searchValue = searchField.value.trim();
+  hideMessage();
+  showLoading()
+  try {
+      const results = await searchCardsWithFilter(selectedType, searchValue , sort, order);
+
+      cards.length = 0;
+      cards.push(...results);
+      showCards(results);
+      if (results.length === 0) {
+        showMessage("No cards found. Try another name.");
+       
+      }
+
+      
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof TypeError) {
+        showMessage("Network error! Please check your internet connection.");
+      } else {
+        showMessage("Something went wrong. Please try again.");
+      }
+    } finally {
+      hideLoading();
+    }
+
+  })})
+  
+
+
+
+
+
 
 const main = async () => {
 
