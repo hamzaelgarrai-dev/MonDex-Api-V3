@@ -1,0 +1,183 @@
+
+{
+  "cards": [
+    {
+      "id": 89631139,
+      "name": "Blue-Eyes White Dragon",
+      "type": "Normal Monster",
+      "race": "Dragon",
+      "image": "https://images.ygoprodeck.com/images/cards_small/89631139.jpg",
+      "description": "This legendary dragon is a powerful engine of destruction.",
+      "stats": {
+        "level": 8,
+        "attack": 3000,
+        "defense": 2500
+      }
+    },
+    {
+      "id": 70095154,
+      "name": "Cyber Dragon",
+      "type": "Effect Monster",
+      "race": "Machine",
+      "image": "https://images.ygoprodeck.com/images/cards_small/70095154.jpg",
+      "description": "If your opponent controls a monster and you control no monsters, you can Special Summon this card from your hand.",
+      "stats": {
+        "level": 5,
+        "attack": 2100,
+        "defense": 1600
+      }
+    },
+    {
+      "id": 64631466,
+      "name": "Relinquished",
+      "type": "Ritual Monster",
+      "race": "Spellcaster",
+      "image": "https://images.ygoprodeck.com/images/cards_small/64631466.jpg",
+      "description": "A Ritual Monster that can equip an opponent's monster and use its ATK and DEF.",
+      "stats": {
+        "level": 1,
+        "attack": 0,
+        "defense": 0
+      }
+    },
+    {
+      "id": 45231177,
+      "name": "Flame Swordsman",
+      "type": "Fusion Monster",
+      "race": "Warrior",
+      "image": "https://images.ygoprodeck.com/images/cards_small/45231177.jpg",
+      "description": "A warrior who wields a blazing sword.",
+      "stats": {
+        "level": 5,
+        "attack": 1800,
+        "defense": 1600
+      }
+    },
+    {
+      "id": 44508094,
+      "name": "Stardust Dragon",
+      "type": "Synchro Monster",
+      "race": "Dragon",
+      "image": "https://images.ygoprodeck.com/images/cards_small/44508094.jpg",
+      "description": "A Synchro Monster that can negate effects that would destroy cards.",
+      "stats": {
+        "level": 8,
+        "attack": 2500,
+        "defense": 2000
+      }
+    },
+    {
+      "id": 84013237,
+      "name": "Number 39: Utopia",
+      "type": "Xyz Monster",
+      "race": "Warrior",
+      "image": "https://images.ygoprodeck.com/images/cards_small/84013237.jpg",
+      "description": "An Xyz Monster that can detach material to negate an attack.",
+      "stats": {
+        "level": 4,
+        "attack": 2500,
+        "defense": 2000
+      }
+    },
+    {
+      "id": 16178681,
+      "name": "Odd-Eyes Pendulum Dragon",
+      "type": "Pendulum Effect Monster",
+      "race": "Dragon",
+      "image": "https://images.ygoprodeck.com/images/cards_small/16178681.jpg",
+      "description": "A Pendulum Monster with effects that support Pendulum Summoning.",
+      "stats": {
+        "level": 7,
+        "attack": 2500,
+        "defense": 2000
+      }
+    },
+    {
+      "id": 1861629,
+      "name": "Decode Talker",
+      "type": "Link Monster",
+      "race": "Cyberse",
+      "image": "https://images.ygoprodeck.com/images/cards_small/1861629.jpg",
+      "description": "A Link Monster that gains ATK based on the monsters it points to.",
+      "stats": {
+        "level": null,
+        "attack": 2300,
+        "defense": null
+      }
+    },
+    {
+      "id": 83764718,
+      "name": "Monster Reborn",
+      "type": "Spell Card",
+      "race": "Spell",
+      "image": "https://images.ygoprodeck.com/images/cards_small/83764718.jpg",
+      "description": "Target 1 monster in either GY; Special Summon it.",
+      "stats": {
+        "level": null,
+        "attack": null,
+        "defense": null
+      }
+    },
+    {
+      "id": 44095762,
+      "name": "Mirror Force",
+      "type": "Trap Card",
+      "race": "Trap",
+      "image": "https://images.ygoprodeck.com/images/cards_small/44095762.jpg",
+      "description": "When an opponent's monster declares an attack: Destroy all your opponent's Attack Position monsters.",
+      "stats": {
+        "level": null,
+        "attack": null,
+        "defense": null
+      }
+    },
+    {
+      "id": 73915051,
+      "name": "Sheep Token",
+      "type": "Token",
+      "race": "Beast",
+      "image": "https://images.ygoprodeck.com/images/cards_small/73915051.jpg",
+      "description": "A token that represents a sheep created by a card effect.",
+      "stats": {
+        "level": 1,
+        "attack": 0,
+        "defense": 0
+      }
+    },
+    {
+      "id": 46986414,
+      "name": "Dark Magician",
+      "type": "Normal Monster",
+      "race": "Spellcaster",
+      "image": "https://images.ygoprodeck.com/images/cards_small/46986414.jpg",
+      "description": "The ultimate wizard in terms of attack and defense.",
+      "stats": {
+        "level": 7,
+        "attack": 2500,
+        "defense": 2100
+      }
+    }
+  ],
+  "teams": [
+    {
+      "id": 1,
+      "name": "Dragon Team",
+      "creatureIds": [89631139, 44508094, 16178681]
+    },
+    {
+      "id": 2,
+      "name": "Warrior Team",
+      "creatureIds": [45231177, 84013237]
+    },
+    {
+      "id": 3,
+      "name": "Machine Team",
+      "creatureIds": [70095154, 1861629]
+    },
+    {
+      "id": 4,
+      "name": "Spellcaster Team",
+      "creatureIds": [64631466, 46986414]
+    }
+  ]
+}

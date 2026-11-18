@@ -16,21 +16,21 @@
 //
 // Pensez à citer la source de vos images dans le README.
 
-export const getData = async (offset) => {
+export const getData = async () => {
 
-    const cacheKey = `cards_${offset}`;
+    // const cacheKey = `cards_${offset}`;
 
     
-    const cachedCards = sessionStorage.getItem(cacheKey);
+    // const cachedCards = sessionStorage.getItem(cacheKey);
 
-    if (cachedCards) {
-        console.log("Cards loaded from cache");
-        return JSON.parse(cachedCards);
-    }
+    // if (cachedCards) {
+    //     console.log("Cards loaded from cache");
+    //     return JSON.parse(cachedCards);
+    // }
 
   
     const response = await fetch(
-        `https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=${offset}`
+        'http://localhost:3000/cards'
     );
 
     if (!response.ok) {
@@ -39,27 +39,52 @@ export const getData = async (offset) => {
 
     const data = await response.json();
 
-    sessionStorage.setItem(cacheKey, JSON.stringify(data.data));
+    // sessionStorage.setItem(cacheKey, JSON.stringify(data.data));
 
-    return data.data;
+    return data;
 };
+
+// filtre from api
+
+export const getFilterData = async (type) => {
+
+    const response = await fetch(
+        `http://localhost:3000/cards?type=${type}`
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch the selected type");
+    }
+
+    const data = await response.json();
+
+    return data;
+};
+
 
 // search in the api function
 
-export const searchCards = async (value) =>{
+export const searchCardsWithFilter = async (type , search) =>{
 
-  const res = await fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=${(value)}`)
+    const params = new URLSearchParams();
 
-   const data = await res.json();
-
-    if (res.status === 400 && data.error) {
-        return [];
+    if(type && type !== "All"){
+        params.append("type" , type)
+    }
+    
+    if(search.trim()){
+        params.append("q" , search.trim())
     }
 
-    if (!res.ok) {
-        throw new Error("API request failed");
-    }
+  const res = await fetch(`http://localhost:3000/cards?${params}`)
 
-    return data.data;
+  
+  if (!res.ok) {
+      throw new Error("API search request failed");
+    }
+    
+    return await res.json();
 
 }
+
+// 

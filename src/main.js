@@ -1,7 +1,7 @@
 
 //getting data from data.js 
 
-import { searchCards} from './services/api.js'
+import { searchCardsWithFilter} from './services/api.js'
 
 import { cards, allCards, hideLoading, initFormValidation, loadCardByType, loadCardDetails, loadCards, loadType, showCards, showLoading, showMessage, hideMessage , checkFormValid, GlobalEventListner , debounce} from './ui.js';
 
@@ -69,29 +69,21 @@ const searchField = document.getElementById("search");
 
 searchField.addEventListener("input", debounce(async () => {
     const searchValue = searchField.value.trim();
-
-    if (searchValue === "") {
-      hideMessage();
-      cards.length = 0;
-      cards.push(...allCards);
-      showCards(cards);
-      return;
-    }
+    const selectedType = localStorage.getItem("selectedType") || "All"
     hideMessage();
     showLoading();
     try {
-      const results = await searchCards(searchValue);
-
-      if (results.length === 0) {
-        cards = [];
-        showCards(cards);
-        showMessage("No cards found. Try another name.");
-        return;
-      }
+      const results = await searchCardsWithFilter(selectedType, searchValue);
 
       cards.length = 0;
       cards.push(...results);
-      showCards(cards);
+      showCards(results);
+      if (results.length === 0) {
+        showMessage("No cards found. Try another name.");
+       
+      }
+
+      
     } catch (error) {
       console.log(error);
 
@@ -103,10 +95,7 @@ searchField.addEventListener("input", debounce(async () => {
     } finally {
       hideLoading();
     }
-  }),
-  400,);
-
-
+  },400));
 
 
 
@@ -114,6 +103,8 @@ searchField.addEventListener("input", debounce(async () => {
 const teamgrid = document.getElementById("team-grid")
 const detailSection = document.getElementById("detail");
 const cardContainer = document.getElementById("grid")
+
+//Add to collection button
 
 GlobalEventListner("click" , ".AddtoCollection" , e =>{
     
@@ -153,6 +144,8 @@ GlobalEventListner("click" , ".AddtoCollection" , e =>{
 })
 },[cardContainer , detailSection ])
 
+//remove from team button
+
 GlobalEventListner("click", ".closeBtn", (e) => {
   
   const CollectionCard = e.target.closest(".team-card");
@@ -173,7 +166,10 @@ GlobalEventListner("click", ".closeBtn", (e) => {
 },[teamgrid]);
 
 
+//load more button
+
 const loadMoreBtn = document.getElementById("loadMoreBtn")
+
 loadMoreBtn.addEventListener("click", async () => {
     await loadCards();
     showCards(cards);
@@ -197,8 +193,6 @@ const toggleFavorite = (id) => {
 };
 
 
-
-
 GlobalEventListner("click", ".favorite-btn", (e) => {
 
     const id = e.target.dataset.id;
@@ -207,6 +201,8 @@ GlobalEventListner("click", ".favorite-btn", (e) => {
 
     toggleFavorite(id);
 });
+
+
 
 const main = async () => {
 

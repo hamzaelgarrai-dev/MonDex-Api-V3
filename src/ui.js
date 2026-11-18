@@ -168,7 +168,7 @@ export const showCards = (cards) =>{
         
         <div class=" relative flex h-72 items-center justify-center rounded-xl ">
 
-            <img class="absolute h-72 " src="${card.card_images?.[0]?.image_url || ''}" loading="lazy"
+            <img class="absolute h-72 " src="${card.image || ''}" loading="lazy"
     decoding="async">
             
             
@@ -237,7 +237,7 @@ export const loadCardDetails = () => {
 
             <div class="flex h-64 items-center justify-center rounded-2xl border border-[#303947]">
                 <img class="absolute h-56"
-                    src="${card.card_images[0].image_url}" alt="">
+                    src="${card.image}" alt="">
             </div>
 
             <div class="flex items-center justify-between">
@@ -346,7 +346,7 @@ export const loadType = () =>{
     })
 
      const favBtn = document.createElement("button");
-    favBtn.className = "type chip bg-[#253348] text-white";
+    favBtn.className = "type chip shrink-0 bg-[#253348] text-white border border-[#303947]";
     favBtn.textContent = "Favorites";
     filterContainer.appendChild(favBtn);
 
@@ -371,6 +371,9 @@ export const loadCardByType = () => {
             activeTypebtn.classList.remove("bg-[#253348]");
             activeTypebtn.classList.add("bg-brand");
 
+            const selectedType = activeTypebtn.textContent.trim();
+            localStorage.setItem("selectedType" , selectedType)
+
             let filteredCards = [];
 
             if (typebtn.textContent === "All") {
@@ -392,6 +395,16 @@ export const loadCardByType = () => {
             showCards(filteredCards);
         });
     });
+
+    const savedType = localStorage.getItem("selectedType" || "All");
+
+    const savedBtn = [...typesBtn].find(btn => btn.textContent.trim() == savedType)
+
+    if(savedBtn){
+        savedBtn.click()
+    }else{
+        typesBtn[0].click()
+    }
 };
 
 
@@ -438,19 +451,19 @@ export const hideLoading = () => {
 
 // load function 
 
-let offset = 20;
-const limit = 20;
+// let offset = 20;
+// const limit = 20;
 
 export const loadCards = async () => {
     loadMoreBtn.disabled = true;
 
     try {
-        const newCards = await getData(offset);
+        const newCards = await getData();
 
         allCards.push(...newCards);
         cards.push(...newCards);
 
-        offset += limit;
+        // offset += limit;
 
     } catch (error) {
         console.log(error);
@@ -479,10 +492,7 @@ export const hideMessage = () =>{
 }
 
 
-
-
-
-// // debouncing
+ // debouncing
 
 export const debounce = (callback, delay) => {
   let timer;
