@@ -18,15 +18,15 @@
 
 export const getData = async () => {
 
-    // const cacheKey = `cards_${offset}`;
+    const cacheKey = "cards";
 
     
-    // const cachedCards = sessionStorage.getItem(cacheKey);
+    const cachedCards = sessionStorage.getItem(cacheKey);
 
-    // if (cachedCards) {
-    //     console.log("Cards loaded from cache");
-    //     return JSON.parse(cachedCards);
-    // }
+    if (cachedCards) {
+        console.log("Cards loaded from cache");
+        return JSON.parse(cachedCards);
+    }
 
   
     const response = await fetch(
@@ -37,10 +37,10 @@ export const getData = async () => {
         throw new Error("Failed to fetch cards");
     }
 
+    const data = await response.json();
+    sessionStorage.setItem(cacheKey, JSON.stringify(data));
 
-    // sessionStorage.setItem(cacheKey, JSON.stringify(data.data));
-
-    return await response.json();
+    return data;
 };
 
 // filtre from api
@@ -99,8 +99,31 @@ export const getCardsDetails = async (id) =>{
         `http://localhost:3000/cards/${id}`
     );
 
+    if(response.status === 400){
+        return null;    
+    }
+
     if (!response.ok) {
         throw new Error("Failed to fetch the cards details");
+    }
+
+    return await response.json();
+
+
+}
+
+// create resource (cards) into api
+
+
+export const createCards = async (card) =>{
+    const response = await fetch(`http://localhost:3000/cards` , {
+        method : "POST",
+        headers : {'Content-Type' : 'application/json'},
+        body : JSON.stringify(card)
+    });
+
+    if(!response.ok){
+        throw new Error("error while creating the card")
     }
 
     return await response.json();

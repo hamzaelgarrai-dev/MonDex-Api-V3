@@ -1,59 +1,57 @@
-
-//getting data from data.js 
-
-import { searchCardsWithFilter} from './services/api.js'
-
-import { cards, allCards, hideLoading, initFormValidation, loadCardByType, loadCardDetails, loadCards, loadType, showCards, showLoading, showMessage, hideMessage , checkFormValid, GlobalEventListner , debounce} from './ui.js';
-
+import { searchCardsWithFilter , getCardsDetails, createCards} from './services/api.js'
+import { cards, allCards, hideLoading, initFormValidation, loadCardByType, showCardDetails, loadCards, loadType, showCards, showLoading, showMessage, hideMessage , checkFormValid, GlobalEventListner , debounce} from './ui.js';
 import { getFavCards , saveToFav } from './storage.js';
+
+
+const form = document.getElementById("creature-form");
+const teamgrid = document.getElementById("team-grid");
+const detailSection = document.getElementById("detail");
+const cardContainer = document.getElementById("grid");
+const searchField = document.getElementById("search");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
 
 // create new card
 
-const form = document.getElementById("creature-form");
 
-form.addEventListener('submit'  , (e) =>{
+form.addEventListener('submit'  , async(e) =>{
     e.preventDefault();
 
     if(checkFormValid()){
         
 
-        const id =  document.querySelector('[name = "id"]').value.trim();
-        const name = document.querySelector('[name = "name"]').value.trim();
-        const type = document.querySelector('[name = "type"]').value.trim();
-        const level = document.querySelector('[name = "level"]').value.trim();
-        const stat1 = document.querySelector('[name = "stat1"]').value.trim();
-        const stat2 = document.querySelector('[name = "stat2"]').value.trim();
-        // const stat3 = document.querySelector('[name = "stat3"]').value.trim();
-        const image = document.querySelector('[name = "image"]').value.trim();
-        const description = document.querySelector('[name = "description"]').value.trim();
-
         const newCard = {
-            id: id,
-            name: name,
-            type: type,
-            level: level,
-            atk: stat1,
-            def: stat2,
-            race: "Custom",
-            desc: description,
-            card_images: [
-                {
-                    image_url: image
-                }
-            ]
-        };
+        id: Number(document.querySelector('[name="id"]').value),
+        name: document.querySelector('[name="name"]').value.trim(),
+        type: document.querySelector('[name="type"]').value,
+        race: "Custom",
+        image: document.querySelector('[name="image"]').value.trim(),
+        description: document.querySelector('[name="description"]').value.trim(),
+        stats: {
+            level: Number(document.querySelector('[name="level"]').value),
+            attack: Number(document.querySelector('[name="stat1"]').value),
+            defense: Number(document.querySelector('[name="stat2"]').value)
+        }
+    };
 
-        let customCards = JSON.parse(localStorage.getItem("customCards")) || [];
+    try {
 
-        customCards.push(newCard);
+      await createCards(newCard);
 
-        localStorage.setItem("customCards", JSON.stringify(customCards));
+      sessionStorage.removeItem("cards");
+      const updatedCards = await getData();
 
-        cards.push(newCard);
+     cards.length = 0;
+     cards.push(...updatedCards);
+     searchField.value = "";
+     localStorage.setItem("selectedType", "All");
 
-        showCards(cards);
-       
-        form.reset();
+    showCards(cards);
+
+    form.reset();
+    } catch (error) {
+      console.error(error);
+    }
+
         
     }
     
@@ -63,9 +61,8 @@ form.addEventListener('submit'  , (e) =>{
 
 
 
-
 // Search in api 
-const searchField = document.getElementById("search");
+
 
 searchField.addEventListener("input", debounce(async () => {
     const searchValue = searchField.value.trim();
@@ -100,9 +97,7 @@ searchField.addEventListener("input", debounce(async () => {
 
 
 
-const teamgrid = document.getElementById("team-grid")
-const detailSection = document.getElementById("detail");
-const cardContainer = document.getElementById("grid")
+
 
 //Add to collection button
 
@@ -168,7 +163,6 @@ GlobalEventListner("click", ".closeBtn", (e) => {
 
 //load more button
 
-const loadMoreBtn = document.getElementById("loadMoreBtn")
 
 loadMoreBtn.addEventListener("click", async () => {
     await loadCards();
@@ -191,7 +185,6 @@ const toggleFavorite = (id) => {
 
     showCards(cards);
 };
-
 
 GlobalEventListner("click", ".favorite-btn", (e) => {
 
@@ -242,7 +235,53 @@ const selectedType = localStorage.getItem("selectedType") || "All";
   
 
 
+// handle cards click to display details
 
+cardContainer.addEventListener("click" , async(e)=>{
+
+  const article = e.target.closest(".article");
+
+  if(!article){
+    return;
+  }
+  if(e.target.closest(".AddtoCollection")){
+    return;
+  }
+  if(e.target.closest(".favorite-btn")){
+    return;
+  }
+
+  const id = article.dataset.id;
+
+  detailSection.innerHTML = `<div id="loader" class="flex justify-center items-center py-10 w-full h-full ">
+          <div class="w-8 h-8 border-4 border-gray-300 border-t-brand rounded-full animate-spin">
+            
+          </div>
+      </div>`
+
+      try{
+
+      const card = await getCardsDetails(id);
+
+      if(!card){
+        detailSection.innerHTML = `<p>No details for this card</p>`
+      }
+
+      showCardDetails(card , detailSection);
+
+      }
+      catch(error){
+
+        console.log(error);
+
+        detailSection.innerHTML = `<p>something went wrong</p>`
+
+      }
+   
+
+
+
+})
 
 
 
@@ -265,7 +304,7 @@ const main = async () => {
         showCards(cards);
         loadType();
         loadCardByType();
-        loadCardDetails();
+        
 
     } catch (error) {
         console.log(error);

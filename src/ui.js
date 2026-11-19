@@ -143,7 +143,6 @@ export const initFormValidation = () => {
 
 
 
-
 // -------------------------------------------------------------
 // 1. AFFICHAGE
 // Supprimez les cartes écrites à la main dans index.html et
@@ -168,8 +167,9 @@ export const showCards = (cards) =>{
         
         <div class=" relative flex h-72 items-center justify-center rounded-xl ">
 
-            <img class="absolute h-72 " src="${card.image || ''}" loading="lazy"
-    decoding="async">
+            <img class="absolute h-72 " src="${card.image}" 
+            loading="lazy"
+            decoding="async">
             
             
           </div>
@@ -191,42 +191,17 @@ export const showCards = (cards) =>{
 }
 
 
-
 // -------------------------------------------------------------
 // 2. DÉTAIL
 // Un clic sur une carte ouvre le panneau de détail :
 // image, description, et statistiques affichées en barres.
 // -------------------------------------------------------------
 
+const teamgrid = document.getElementById("team-grid");
+export const showCardDetails = (card , detailSection) =>{
+    detailSection.dataset.id = card.id;
 
-export const loadCardDetails = () => {
-
-    const cardContainer = document.querySelector("#grid");
-    const detailSection = document.getElementById("detail");
-    const teamgrid = document.getElementById("team");
-
-    cardContainer.addEventListener("click", (e) => {
-
-        const article = e.target.closest(".article");
-
-        if (!article) return;
-
-        if (e.target.closest(".AddtoCollection")) {
-            return;
-        }
-        if (e.target.closest(".favorite-btn")){
-            return;
-        } 
-
-        const id = article.getAttribute("data-id");
-
-        const card = cards.find(card => card.id == id);
-
-        if (!card) return;
-
-        detailSection.dataset.id = card.id;
-
-        detailSection.innerHTML = `
+    detailSection.innerHTML = `
             <div class="flex items-center justify-between">
                 <span class="font-mono text-sm text-[#9CA9BC]">
                     ${card.id} · Détail
@@ -296,6 +271,7 @@ export const loadCardDetails = () => {
             </button>
         `;
 
+
         const closeBtn = detailSection.querySelector(".closeBtn");
 
         closeBtn.addEventListener("click", () => {
@@ -304,6 +280,8 @@ export const loadCardDetails = () => {
                     No Card Selected
                 </div>
             `;
+
+            delete detailSection.dataset.id;
         });
 
         if (teamgrid.children.length >= 6) {
@@ -314,9 +292,8 @@ export const loadCardDetails = () => {
             });
         }
 
-    });
-};
 
+}
 
 
 // -------------------------------------------------------------
@@ -376,10 +353,10 @@ export const loadCardByType = () => {
 
             let filteredCards = [];
 
-            if (typebtn.textContent === "All") {
+            if (selectedType === "All") {
                 filteredCards = cards;
 
-            } else if (typebtn.textContent === "Favorites") {
+            } else if (selectedType === "Favorites") {
                 const favorites = getFavCards("favorites") || [];
 
                 filteredCards = cards.filter(card =>
@@ -388,7 +365,7 @@ export const loadCardByType = () => {
 
             } else {
                 filteredCards = cards.filter(card =>
-                    card.type === typebtn.textContent
+                    card.type === selectedType
                 );
             }
 
