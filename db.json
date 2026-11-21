@@ -181,6 +181,19 @@
         "attack": 222,
         "defense": 888
       }
+    },
+    {
+      "id": 89631142,
+      "name": "RelinElick",
+      "type": "Électrik",
+      "race": "Custom",
+      "image": "https://images.ygoprodeck.com/images/cards_small/64631466.jpg",
+      "description": "A Ritual Monster that can equip an opponent's monster and use its ATK and DEF.",
+      "stats": {
+        "level": 7,
+        "attack": 0,
+        "defense": 0
+      }
     }
   ],
   "teams": [

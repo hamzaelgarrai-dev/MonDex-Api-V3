@@ -1,4 +1,4 @@
-import { searchCardsWithFilter , getCardsDetails, createCards} from './services/api.js'
+import { searchCardsWithFilter , getCardsDetails, createCards , updateCard , deleteCard} from './services/api.js'
 import { cards, allCards, hideLoading, initFormValidation, loadCardByType, showCardDetails, loadCards, loadType, showCards, showLoading, showMessage, hideMessage , checkFormValid, GlobalEventListner , debounce} from './ui.js';
 import { getFavCards , saveToFav } from './storage.js';
 
@@ -35,19 +35,35 @@ form.addEventListener('submit'  , async(e) =>{
 
     try {
 
-      await createCards(newCard);
+      if (editingCardId !== null) {
 
-      sessionStorage.removeItem("cards");
-      const updatedCards = await getData();
+                await updateCard(editingCardId, newCard);
 
-     cards.length = 0;
-     cards.push(...updatedCards);
-     searchField.value = "";
-     localStorage.setItem("selectedType", "All");
+                editingCardId = null;
 
-    showCards(cards);
+            } else {
 
-    form.reset();
+                await createCards(newCard);
+
+            }
+
+            sessionStorage.removeItem("cards");
+
+            const updatedCards = await getData();
+
+            cards.length = 0;
+            cards.push(...updatedCards);
+
+            searchField.value = "";
+            localStorage.setItem("selectedType", "All");
+
+            showCards(cards);
+
+            form.reset();
+
+            idInput.disabled = false;
+            const createCardBtn = document.getElementById("create-card")
+            createCardBtn.textContent = "Create Card";
     } catch (error) {
       console.error(error);
     }
@@ -104,6 +120,7 @@ searchField.addEventListener("input", debounce(async () => {
 GlobalEventListner("click" , ".AddtoCollection" , e =>{
     
      const selectedCardID = e.target.parentElement.getAttribute("data-id")
+     console.log(selectedCardID)
 
     const cardCount = document.getElementById("team-count");
      const alreadyAdded = teamgrid.querySelector(`[data-id="${selectedCardID}"]`);
@@ -121,7 +138,7 @@ GlobalEventListner("click" , ".AddtoCollection" , e =>{
                      class="closeBtn absolute btn-outline bg-white/60 w-9 h-9 px-0 z-50 right-4 top-2">✕</button>
 
                      <img class="relative h-56 w-full object-contain"
-                    src="${card.card_images[0].image_url}" alt="${card.name}">
+                    src="${card.image}" alt="${card.name}">
                      </div>`
                      
                      cardCount.textContent = teamgrid.children.length
@@ -284,6 +301,85 @@ cardContainer.addEventListener("click" , async(e)=>{
 })
 
 
+// handle card editing 
+
+let editingCardId = null;
+
+
+detailSection.addEventListener("click", (e) => {
+
+  const idInput = document.querySelector('[name="id"]');
+  const nameInput = document.querySelector('[name="name"]');
+  const typeInput = document.querySelector('[name="type"]');
+  const levelInput = document.querySelector('[name="level"]');
+  const stat1Input = document.querySelector('[name="stat1"]');
+  const stat2Input = document.querySelector('[name="stat2"]');
+  const imageInput = document.querySelector('[name="image"]');
+  const descriptionInput = document.querySelector('[name="description"]');
+
+    const editBtn = e.target.closest(".editCard");
+
+    if (!editBtn) return;
+
+    const id = editBtn.dataset.id;
+
+    const card = cards.find(card => String(card.id) === id);
+
+    if (!card) return;
+
+    editingCardId = card.id;
+
+    // Fill the form with existing values
+    idInput.value = `#${card.id}`;
+    nameInput.value = card.name;
+    typeInput.value = card.type;
+    levelInput.value = card.stats?.level ?? "";
+    stat1Input.value = card.stats?.attack ?? "";
+    stat2Input.value = card.stats?.defense ?? "";
+    imageInput.value = card.image;
+    descriptionInput.value = card.description;
+
+    // Change button text
+    const createCardBtn = document.getElementById("create-card")
+    createCardBtn.textContent = "Update Card";
+
+    form.scrollIntoView({ behavior: "smooth" });
+});
+
+
+
+// handle deleting a card
+
+detailSection.addEventListener("click", async (e) => {
+
+    const deleteBtn = e.target.closest(".deleteCard");
+
+    if (!deleteBtn) return;
+
+    const id = deleteBtn.dataset.id;
+
+    const confirmed = confirm("Are you sure you want to delete this card?");
+
+    if (!confirmed) return;
+
+    try {
+        await deleteCard(id);
+
+        const index = cards.findIndex(card => String(card.id) === id);
+
+        if (index !== -1) {
+            cards.splice(index, 1);
+        }
+
+        sessionStorage.removeItem("cards");
+
+        showCards(cards);
+
+    } catch (error) {
+        console.error(error);
+        alert("Error while deleting the card.");
+    }
+});
 
 const main = async () => {
 

@@ -99,7 +99,7 @@ export const getCardsDetails = async (id) =>{
         `http://localhost:3000/cards/${id}`
     );
 
-    if(response.status === 400){
+    if(response.status === 404){
         return null;    
     }
 
@@ -130,3 +130,36 @@ export const createCards = async (card) =>{
 
 
 }
+
+
+// update a card
+
+export const updateCard = async (id , card) =>{
+    const response = await fetch(`http://localhost:3000/cards/${id}`, {
+        method : "PUT",
+        headers : {'Content-Type' : 'application/json'},
+        body : JSON.stringify(card)
+    });
+
+    if(!response.ok){
+        throw new Error("Error while updating card");
+    }
+
+    return await response.json();
+
+}
+
+
+
+export  const deleteCard = async (id) =>{
+
+    const response = await fetch(`http://localhost:3000/cards/${id}`,{
+
+        method : "DELETE"
+
+    })
+    if(!response.ok){
+        throw new Error("Error while deleting the card");
+    }
+}
+

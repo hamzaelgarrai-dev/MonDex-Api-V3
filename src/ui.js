@@ -269,7 +269,13 @@ export const showCardDetails = (card , detailSection) =>{
             <button type="button" class="btn-primary AddtoCollection">
                 Add to My Collections
             </button>
-        `;
+            <button class="editCard btn-outline bg-[#232d3d] border border-[#303947] text-white text-[15px] hover:bg-blue-950" data-id="${card.id}">
+                 Edit
+            </button>
+            <button class="deleteCard btn-outline bg-[#232d3d] border border-[#303947] text-white text-[15px] hover:bg-red-950" data-id="${card.id}">
+                 Delete
+            </button>
+              `;
 
 
         const closeBtn = detailSection.querySelector(".closeBtn");
